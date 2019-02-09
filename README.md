@@ -1,6 +1,9 @@
 # Gale-Shapley Pseudocode
 Schnelker, Sommers, Binmansour
 INITIALIZE S to empty matching.
+INITIALIZE Q to empty queue.
+FOR m in men, where m is a man's name
+  Q.append(m)
 WHILE (the q containing men is not empty [therefore, the man is unmatched and hasn't proposed to every woman])
   POP m from the queue
   FOR (w, a woman's name, in the preference list of the current man)
