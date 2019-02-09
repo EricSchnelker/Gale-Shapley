@@ -55,7 +55,7 @@ def gs(men, women, pref):
                 print("Pairing " + m + " with " + w + ". Adding the happy couple to matched pairs. They have won the round.")
                 #prints to keep track of where the program is and what it's doing
                 break
-            elif pref[w].index(m) < pref[w].index(matchedPairs.get(w)) and m not in matchedPairs:
+            elif pref[w].index(m) < pref[w].index(matchedPairs.get(w)):
                 mrDumped = matchedPairs.get(w) #if in this elif, the previous pair is broken, and mrdumped is the man from that pair
                 print(mrDumped + " is a horrible person and was dumped by " + w + ". Adding him back to the queue and pairing " + w + " with " + m)
                 #prints to keep track of where the program is and what it's doing
@@ -130,27 +130,57 @@ def gs_block(men, women, pref, blocked):
 
 
 def gs_tie(men, women, preftie):
-    w = women
-    output = []
-    for i in men:
-        pref = 0
-        l = 0
-        while l < len(w):
-            pef = list(preftie[i][pref])
-            e = 0
-            while e < len(pef):
-                pef2 = pef[e]
-                if len(w) == 1:
-                    q = (i, w[0])
-                    output.append(q)
-                if pef2 in w:
-                    q = (i, pef2)
-                    w.remove(pef2)
-                    output.append(q)
-                e = e + 1
-            l = l + 1
-    return output
+    matchedPairs = {}  # initialize dictionary to keep track of pairs
+    s = []  # Tuples to contain pairs
+    q = []
+    men_paired = []
+    print()
+    print()
+    print()
 
+    for m in men:
+        q.append(m) #queue to keep track of unpaired men - this fills the queue
+    while q: #while men in the queue
+        m = q.pop(0) #pops off first man in queue
+        for i in range(len(preftie[m])):
+            for w in preftie[m][i]:
+                if m in men_paired:
+                    break
+                if w not in matchedPairs:
+                    matchedPairs[w] = m
+                    men_paired.append(m)
+                    print("Pairing " + m + " with " + w + ". Adding the happy couple to matched pairs. They have won the round.")
+                    #prints to keep track of where the program is and what it's doing
+                    break
+                else:
+                    indexNewGuy = int()
+                    indexOG = int()
+                    for i in range(len(preftie[w])):
+                        if m in preftie[w][i]:
+                            indexNewGuy = i
+                        elif matchedPairs[w] in preftie[w][i]:
+                            indexOG = i
+                        elif m in preftie[w][i] and matchedPairs[w] in preftie[w][i]:
+                            print("Both in same preference level. Breaking...")
+                            break
+                    if indexNewGuy < indexOG:
+                        mrDumped = matchedPairs.get(w) #if in this elif, the previous pair is broken, and mrdumped is the man from that pair
+                        men_paired.remove(mrDumped)
+                        print(mrDumped + " is a horrible person and was dumped by " + w + ". Adding him back to the queue and pairing " + w + " with " + m)
+                        #prints to keep track of where the program is and what it's doing
+                        matchedPairs[w] = m #new pair
+                        men_paired.append(m)
+                        q.append(mrDumped) #adds the main from previous pair back to queue to resend him through pairing
+                        break
+                    print(m + " is hopeless and was rejected by " + w + ". Moving on to the next woman on his target... I mean, um... preference list.")
+            else:
+                continue
+
+            #prints to keep track of where the program is and what it's doing
+    for w in women:
+        s.append((matchedPairs.get(w), w))
+        #gives output as tuples
+    return s
 
 if __name__ == "__main__":
     # input data
