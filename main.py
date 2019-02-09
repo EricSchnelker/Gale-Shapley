@@ -10,16 +10,20 @@ _____________
 PSEUDOCODE:
 _____________
 INITIALIZE S to empty matching.
-WHILE (some man m is unmatched and hasn't proposed to every woman)
-  WHILE (c, the index of some woman on m's list to whom m has not yet proposed to [where i is initialized to 0), is less than the length of m's preference list)
+INITIALIZE Q to empty queue.
+FOR m in men, where m is a man's name
+  Q.append(m)
+WHILE (the q containing men is not empty [therefore, the man is unmatched and hasn't proposed to every woman])
+  POP m from the queue
+  FOR (w, a woman's name, in the preference list of the current man)
       IF (w is unmatched)
-        Add pair m–w to matching S.
+        ADD pair m–w to matching S.
       ELSE IF (w prefers m to her current partner m')
-        Remove pair m'–w from matching S.
-        Add pair m–w to matching S.
+        REMOVE pair m'–w from matching S.
+        ADD pair m–w to matching S.
+        ADD m' back to the queue
       ELSE
         w rejects m.
-        increment w by one
 RETURN stable matching S.
 """
 
