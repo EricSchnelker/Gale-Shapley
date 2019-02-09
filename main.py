@@ -88,47 +88,64 @@ def gs_block(men, women, pref, blocked):
     q = []
     locked = set()
 
-    for pair in blocked:
-        if pair[0] not in q:
+    for pair in blocked: #makes it so we iterate over the men in blocked first and if they're paired they get locked.
+        if pair[0] not in q: #adds men in blocked to queue
             q.append(pair[0])
-        locked.add(pair[0])
-    for m in men:
+        locked.add(pair[0]) #makes it so if these men have a successful pair, they can't be dumped
+    for m in men: #adds rest of men to queue
         if m not in q:
             q.append(m)
     while q:
-        m = q.pop(0)
+        m = q.pop(0) #pops off first man in list
         for w in pref[m]:
             if (m, w) in blocked:
+                print(m + " is hopeless and was rejected by " + w + " because, although " + m + " was not paired, his pairing with " + w + " was forbidden. Moving on to the next woman on his target... I mean, um... preference list.")
+                #prints to keep track of where the program is and what it's doing
                 continue
             if w not in matchedPairs:
                 matchedPairs[w] = m
                 print("Pairing " + m + " with " + w + ". Adding the happy couple to matched pairs. They have won the round.")
+                #prints to keep track of where the program is and what it's doing
                 break
             elif pref[w].index(m) < pref[w].index(matchedPairs.get(w)) and matchedPairs.get(w) not in locked:
-                mrDumped = matchedPairs.get(w)
+                mrDumped = matchedPairs.get(w) #if in this elif, the previous pair is broken, and mrdumped is the man from that pair
                 print(mrDumped + " is a horrible person and was dumped by " + w + ". Adding him back to the queue and pairing " + w + " with " + m)
-                matchedPairs[w] = m
-                q.append(mrDumped)
+                #prints to keep track of where the program is and what it's doing
+                matchedPairs[w] = m #new pair
+                q.append(mrDumped) #adds the main from previous pair back to queue to resend him through pairing
                 break
             else:
                 print(m + " is hopeless and was rejected by " + w + " because, although " + m + " was not paired, his pairing with " + w + " was forbidden. Moving on to the next woman on his target... I mean, um... preference list.")
+                #prints to keep track of where the program is and what it's doing
+                continue
     for w in women:
         s.append((matchedPairs.get(w), w))
-
+        #gives output as tuples
     return s
 
 
 
 def gs_tie(men, women, preftie):
-  """
-  Gale-Shapley algorithm, modified to use preferences with ties
-  Inputs: men (list of men's names)
-          women (list of women's names)
-          preftie (dictionary of preferences mapping names to
-              list of sets of preferred names in sorted order)
-  Output: the stable match S which is a list of pairs of the form (m, w)
-  """
-  return "test"
+    w = women
+    output = []
+    for i in men:
+        pref = 0
+        l = 0
+        while l < len(w):
+            pef = list(preftie[i][pref])
+            e = 0
+            while e < len(pef):
+                pef2 = pef[e]
+                if len(w) == 1:
+                    q = (i, w[0])
+                    output.append(q)
+                if pef2 in w:
+                    q = (i, pef2)
+                    w.remove(pef2)
+                    output.append(q)
+                e = e + 1
+            l = l + 1
+    return output
 
 
 if __name__ == "__main__":
@@ -157,8 +174,7 @@ if __name__ == "__main__":
     blocked = {
         ('xavier', 'clare'),
         ('zeus', 'clare'),
-        ('zeus', 'amy'),
-        ('yancey', 'bertha')
+        ('zeus', 'amy')
     }
 
     match = gs(the_men, the_women, the_pref)
